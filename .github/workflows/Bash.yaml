@@ -1,0 +1,30 @@
+name: Overthewire bandit Bash
+
+on:
+  push:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          stat ./bandit.sh
+          chmod +x ./bandit.sh
+          ./bandit.sh
+
+      - run:
+          cat ./passwords
+        if: always()
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Bandit.OverTheWire.Passwords
+          path: ./passwords
