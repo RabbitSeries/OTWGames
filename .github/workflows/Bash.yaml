@@ -1,7 +1,6 @@
 name: Overthewire bandit Bash
 
 on:
-  push:
 
 jobs:
   build:

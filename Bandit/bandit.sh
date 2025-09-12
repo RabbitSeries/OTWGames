@@ -356,3 +356,59 @@ if [ $level = 28 ]; then
     level=$((level+1))
     print_psw_to_file $level "$psw"
 fi
+
+if [ $level = 29 ]; then
+	git_comand $level $psw
+	cd repo
+	git branch -a
+	git checkout origin/dev
+	git reset HEAD~1
+	psw=$(extract_last_segment "$(cat ./README.md)")
+	cd ..
+	rm -rf repo
+    level=$((level+1))
+	print_psw_to_file $level "$psw"
+fi
+
+if [ $level = 30 ]; then
+	git_comand $level $psw
+	cd repo
+	git tag
+	psw=$(git show secret)
+	cd ..
+	rm -rf ./repo
+    level=$((level+1))
+	print_psw_to_file $level "$psw"
+fi
+
+if [ $level = 31 ]; then
+	git_comand $level $psw
+	cd repo
+	echo "" > ./.gitignore
+	echo "May I come in?" > key.txt
+	git add --all
+	# Restore .gitignore
+	echo "*.txt" > ./.gitignore
+	git commit -am "May I come in?"
+	sshpass -p $psw git push
+	cd ..
+	rm -rf ./repo
+	read -p "Enter retrieved password: " psw
+    level=$((level+1))
+	print_psw_to_file $level "$psw"
+fi
+
+if [ $level = 32 ]; then
+	sshpass -p $psw ssh bandit$Level@$BANDIT_DOMAIN -p 2220
+	# $0
+	# cat /etc/bandit_pass/bandit33
+	# exit
+	# ^C
+	read -p "Enter retrieved password: " psw
+    level=$((level+1))
+	print_psw_to_file $level "$psw"
+fi
+
+if [ $level = 33 ]; then
+	echo "At this moment, level 34 does not exist yet."
+fi
