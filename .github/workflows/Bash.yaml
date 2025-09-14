@@ -1,6 +1,8 @@
 name: Overthewire bandit Bash
 
 on:
+  pull_request:
+    branches: [master]
 
 jobs:
   build:
