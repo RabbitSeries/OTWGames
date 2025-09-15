@@ -77,7 +77,7 @@ def passwordLineGetter(text: str, level: int):
     return (lambda: updateAuth(level, psw[0:32])) if psw else None
 
 
-def semicolonGetter(text: str, level: int):
+def passwordColonGetter(text: str, level: int):
     pattern = re.compile(r'Password: (\w{32})')
     psw = getter(text, lambda line: pattern.search(line) is not None)
     return (lambda: updateAuth(level, psw.split("Password:")[1].strip()[0:32])) if psw else None

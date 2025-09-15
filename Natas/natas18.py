@@ -17,5 +17,5 @@ for phpSessionId in range(1, 640):
     # print(r.text)
     if text := predicate(phpSessionId):
         print(f"Admin session id: {phpSessionId}")
-        Auther.semicolonGetter(text, 19)()
+        Auther.passwordColonGetter(text, 19)()
         break

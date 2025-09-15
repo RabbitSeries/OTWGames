@@ -10,4 +10,4 @@ def registerSession():
 text = registerSession()  # register data
 if "You are an admin" not in text:
     text = registerSession()  # read data
-Auther.semicolonGetter(text, 21)()
+Auther.passwordColonGetter(text, 21)()

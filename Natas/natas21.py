@@ -17,4 +17,4 @@ if __name__ == "__main__":
     registerSession()
 
     with Auther.request(21, cookies=session_cookie) as r:
-        Auther.semicolonGetter(r.text, 22)()
+        Auther.passwordColonGetter(r.text, 22)()

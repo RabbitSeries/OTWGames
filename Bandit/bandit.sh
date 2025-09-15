@@ -326,10 +326,10 @@ if [ $level = 25 ]; then
 	# q
     level=$((level+1))
 	ssh -i ./bandit26.sshkey "bandit$level@$BANDIT_DOMAIN" -p $BANDIT_PROT 2>>exception.log
-	read -p "Enter retrived level26's password: " psw
+	read -p "Enter retrieved level26's password: " psw
     print_psw_to_file $level "$psw"
     level=$((level+1))
-	read -p "Enter retrived level27's password: " psw
+	read -p "Enter retrieved level27's password: " psw
     print_psw_to_file $level "$psw"
 	rm ./bandit26.sshkey
 fi
